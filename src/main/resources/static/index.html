@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        /* 📊 NEW: Dashboard Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .url-column {
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body onload="loadDashboard()">
+
+<div class="container">
+    <h1>✂️ URL Shortener</h1>
+    <p>Paste your long link below to get a shorter one!</p>
+
+    <div>
+        <input type="text" id="originalUrl" placeholder="https://example.com">
+        <button onclick="shortenUrl()">Shorten</button>
+    </div>
+
+    <div id="result"></div>
+
+    <hr style="border: 1px solid #eee; margin: 30px 0;">
+    <h2>📈 Your Link Analytics</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Short Link</th>
+            <th>Original URL</th>
+            <th>Clicks</th>
+        </tr>
+        </thead>
+        <tbody id="linksTableBody">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function shortenUrl() {
+        const urlInput = document.getElementById('originalUrl').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!urlInput) {
+            resultDiv.innerHTML = "<span style='color: red;'>Please enter a URL first!</span>";
+            return;
+        }
+
+        resultDiv.innerHTML = "Shortening...";
+
+        try {
+            const response = await fetch('/api/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: urlInput
+            });
+
+            if (response.ok) {
+                const shortUrl = await response.text();
+                resultDiv.innerHTML = `Success! Here is your link: <br><br> <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+
+                // 📊 NEW: Refresh the table immediately after creating a new link!
+                loadDashboard();
+            } else {
+                resultDiv.innerHTML = "<span style='color: red;'>Oops! Something went wrong on the server.</span>";
+            }
+        } catch (error) {
+            resultDiv.innerHTML = "<span style='color: red;'>Failed to connect to the server.</span>";
+        }
+    }
+
+    // 📊 NEW: Function to fetch links and build the table
+    async function loadDashboard() {
+        try {
+            const response = await fetch('/api/links');
+            const links = await response.json();
+
+            const tableBody = document.getElementById('linksTableBody');
+            tableBody.innerHTML = ''; // Clear out the old data
+
+            // Loop through every link from the database
+            links.forEach(link => {
+                const shortUrlFull = `http://localhost:8080/${link.shortCode}`;
+
+                const row = `<tr>
+                    <td><a href="${shortUrlFull}" target="_blank">${link.shortCode}</a></td>
+                    <td class="url-column" title="${link.originalUrl}"><a href="${link.originalUrl}" target="_blank">${link.originalUrl}</a></td>
+                    <td style="text-align: center; font-weight: bold;">${link.clicks}</td>
+                </tr>`;
+
+                tableBody.innerHTML += row;
+            });
+
+        } catch (error) {
+            console.error("Error loading dashboard data", error);
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 1. The MySQL Database Container
+  mysql-db:
+    image: mysql:8.0
+    container_name: url-shortener-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root              # Root password required by MySQL
+      MYSQL_DATABASE: url_shortener          # Your exact database name
+      MYSQL_USER: url_admin                  # Your exact username
+      MYSQL_PASSWORD: password123            # Your exact password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 2. Your Spring Boot App Container
+  url-app:
+    build: .
+    container_name: url-shortener-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    environment:
+      # Overrides application.properties to connect to the Docker network
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/url_shortener?serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: url_admin
+      SPRING_DATASOURCE_PASSWORD: password123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+
+volumes:
+  db_data:
