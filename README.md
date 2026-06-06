@@ -32,7 +32,7 @@ You do not need Java or MySQL installed locally to run this application. You onl
 
 5. Shutting Down
 
-To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
+   To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
 
    ```bash
    docker-compose down
