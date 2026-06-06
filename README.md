@@ -3,7 +3,7 @@
 A production-ready URL Shortener web application built using **Spring Boot**, **Thymeleaf**, and **MySQL**, fully containerized using **Docker** and **Docker Compose**.
 
 ## 🛠️ Tech Stack
-* **Backend:** Java 17, Spring Boot, Spring Data JPA
+* **Backend:** Java 21, Spring Boot, Spring Data JPA
 * **Frontend:** HTML5, TailwindCSS / Thymeleaf templates
 * **Database:** MySQL 8.0
 * **Containerization:** Docker, Docker Compose
