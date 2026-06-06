@@ -18,7 +18,7 @@ You do not need Java or MySQL installed locally to run this application. You onl
    cd URL-Shortener
    ```
 
-2. Package the Spring Boot application:
+2. Package the Spring Boot application into a executable .jar file:
    ```bash
    ./mvnw package -DskipTests
    ```
