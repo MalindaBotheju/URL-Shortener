@@ -26,13 +26,18 @@ You do not need Java or MySQL installed locally to run this application. You onl
    ```
 
 3. Spin up the multi-container environment:
+   Windows:
    ```bash
    docker-compose up --build
    ```
+   Linux:
+   ```bash
+   sudo docker-compose up --build
+   ```
    
-4. Open your browser and visit: **`http://localhost:8080`**
+5. Open your browser and visit: **`http://localhost:8080`**
 
-5. To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
+6. To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
 
    ```bash
    docker-compose down
