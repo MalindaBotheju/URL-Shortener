@@ -26,6 +26,7 @@ You do not need Java or MySQL installed locally to run this application. You onl
    ```
 
 3. Spin up the multi-container environment:
+   
    Windows:
    ```bash
    docker-compose up --build
