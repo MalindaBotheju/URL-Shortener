@@ -15,6 +15,8 @@ You do not need Java or MySQL installed locally to run this application. You onl
 1. Clone this repository:
    ```bash
    git clone https://github.com/MalindaBotheju/URL-Shortener.git
+   ```
+   ```bash
    cd URL-Shortener
    ```
 
