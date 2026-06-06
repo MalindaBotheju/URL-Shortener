@@ -30,9 +30,7 @@ You do not need Java or MySQL installed locally to run this application. You onl
    
 4. Open your browser and visit: **`http://localhost:8080`**
 
-5. Shutting Down
-
-   To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
+5. To stop the running containers gracefully, use `Ctrl + C` in the terminal, or run:
 
    ```bash
    docker-compose down
